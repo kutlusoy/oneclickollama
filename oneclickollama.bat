@@ -439,8 +439,35 @@ if not exist "%PYTHON_EXE%" (
 echo %YELLOW%[INFO]%RESET% Installing required Python packages (portable)...
 "%PIP_EXE%" install --upgrade pip --no-warn-script-location
 "%PIP_EXE%" install PyPDF2 pdfplumber python-docx openpyxl python-pptx pandas sqlparse chardet pillow --no-warn-script-location
-"%PIP_EXE%" install PyMuPDF pytesseract --no-warn-script-location
+"%PIP_EXE%" install PyMuPDF pytesseract beautifulsoup4 --no-warn-script-location
 echo %GREEN%[OK]%RESET% Python dependencies installed
+goto :eof
+
+:process_documents
+echo %YELLOW%[INFO]%RESET% Processing documents with portable Python...
+echo %YELLOW%[DEBUG]%RESET% Python path: %PYTHON_EXE%
+echo %YELLOW%[DEBUG]%RESET% Script path: %WORK_DIR%\document_processor.py
+echo %YELLOW%[DEBUG]%RESET% Docs dir: %DOCS_DIR%
+echo %YELLOW%[DEBUG]%RESET% Output dir: %OUTPUT_DIR%
+
+cd /d "%WORK_DIR%"
+if exist "document_processor.py" (
+    if exist "%PYTHON_EXE%" (
+        "%PYTHON_EXE%" document_processor.py "%DOCS_DIR%" "%OUTPUT_DIR%"
+        if errorlevel 1 (
+            echo %RED%[ERROR]%RESET% Document processing failed
+            pause
+        ) else (
+            echo %GREEN%[OK]%RESET% Documents processed successfully
+        )
+    ) else (
+        echo %RED%[ERROR]%RESET% Python executable not found: %PYTHON_EXE%
+        pause
+    )
+) else (
+    echo %RED%[ERROR]%RESET% Document processor script not found
+    pause
+)
 goto :eof
 
 :create_processing_script
@@ -452,12 +479,14 @@ echo import sys
 echo import json
 echo from pathlib import Path
 echo import chardet
+echo import re
 echo.
 echo try:
 echo     import pdfplumber
 echo     from docx import Document
 echo     import openpyxl
 echo     import pandas as pd
+echo     from bs4 import BeautifulSoup
 echo except ImportError as e:
 echo     print("Missing dependency:", e^)
 echo     sys.exit(1^)
@@ -515,6 +544,27 @@ echo         except Exception as e:
 echo             print("Error processing DOCX:", file_path, ":", e^)
 echo             return ""
 echo.
+echo     def process_html(self, file_path^):
+echo         try:
+echo             encoding = self.detect_encoding(file_path^)
+echo             with open(file_path, "r", encoding=encoding^) as f:
+echo                 html_content = f.read(^)
+echo             # Parse HTML and extract text content
+echo             soup = BeautifulSoup(html_content, 'html.parser'^)
+echo             # Remove script and style elements
+echo             for script in soup(["script", "style"]^):
+echo                 script.extract(^)
+echo             # Get text content
+echo             text = soup.get_text(^)
+echo             # Clean up whitespace
+echo             lines = (line.strip(^) for line in text.splitlines(^)^)
+echo             chunks = (phrase.strip(^) for line in lines for phrase in line.split("  "^)^)
+echo             text = '\n'.join(chunk for chunk in chunks if chunk^)
+echo             return text
+echo         except Exception as e:
+echo             print("Error processing HTML file:", file_path, ":", e^)
+echo             return ""
+echo.
 echo     def process_text_file(self, file_path^):
 echo         try:
 echo             encoding = self.detect_encoding(file_path^)
@@ -536,7 +586,9 @@ echo             if suffix == ".pdf":
 echo                 content = self.process_pdf(file_path^)
 echo             elif suffix in [".docx", ".doc"]:
 echo                 content = self.process_docx(file_path^)
-echo             elif suffix in [".txt", ".md", ".py", ".js", ".html", ".css", ".json", ".xml", ".sql", ".csv"]:
+echo             elif suffix in [".html", ".htm"]:
+echo                 content = self.process_html(file_path^)
+echo             elif suffix in [".txt", ".md", ".py", ".js", ".css", ".json", ".xml", ".sql", ".csv"]:
 echo                 content = self.process_text_file(file_path^)
 echo             else:
 echo                 print("Unsupported file type:", suffix^)
