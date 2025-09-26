@@ -392,17 +392,17 @@ goto :eof
 
 :install_ollama
 echo %YELLOW%[INFO]%RESET% Downloading Ollama installer...
-powershell -Command "try { Invoke-WebRequest -Uri 'https://ollama.com/download/OllamaSetup.exe' -OutFile '%TEMP%\OllamaSetup.exe' -ErrorAction Stop } catch { exit 1 }"
+powershell -Command "try { Invoke-WebRequest -Uri 'https://ollama.com/download/OllamaSetup.exe' -OutFile 'OllamaSetup.exe' -ErrorAction Stop } catch { exit 1 }"
 if %ERRORLEVEL% neq 0 (
     echo %RED%[ERROR]%RESET% Download failed! Please check your internet connection.
     pause
     goto :eof
 )
 echo %YELLOW%[INFO]%RESET% Installing Ollama...
-start /wait "%TEMP%\OllamaSetup.exe" /S
+start /wait "OllamaSetup.exe" /S
 if %ERRORLEVEL% equ 0 (
     echo %GREEN%[SUCCESS]%RESET% Ollama installed successfully!
-    del "%TEMP%\OllamaSetup.exe"
+    del "OllamaSetup.exe"
 ) else (
     echo %RED%[ERROR]%RESET% Installation failed!
 )
