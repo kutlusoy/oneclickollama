@@ -399,7 +399,7 @@ if %ERRORLEVEL% neq 0 (
     goto :eof
 )
 echo %YELLOW%[INFO]%RESET% Installing Ollama...
-start /wait "OllamaSetup.exe" /S
+start /wait "OllamaSetup.exe"
 if %ERRORLEVEL% equ 0 (
     echo %GREEN%[SUCCESS]%RESET% Ollama installed successfully!
 ) else (
