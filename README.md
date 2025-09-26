@@ -1,15 +1,16 @@
 # OneClickOllama - Custom Ollama Model Creator
 
-A complete one-click solution for creating custom Ollama models from your documents on Windows. Transform your PDFs, Word documents, Excel files, and other documents into specialized AI models with embedded knowledge.
+A complete one-click solution for creating optimized custom Ollama models on Windows. Configure specialized AI models with custom instructions and enhanced performance settings.
 
 ## 🚀 Features
 
 - **One-Click Setup**: Automatically installs all dependencies including Ollama and Python
-- **Multi-Format Support**: Process PDF (with images), Word, Excel, PowerPoint, text files, SQL, CSV, and more
-- **Intelligent Document Processing**: Advanced text extraction from complex documents including tables
+- **Multi-Format Support**: Support for various document formats for reference and instruction creation
+- **Intelligent Document Processing**: Advanced text extraction for creating comprehensive model instructions
 - **Model Customization**: Configure temperature, top-p, context length, and behavior instructions
+- **Custom Instructions**: Add specific instructions directly within your documents to enhance model behavior
 - **Popular Model Support**: Choose from 10+ pre-configured popular models or use custom models
-- **Embedded Knowledge**: Training data is directly embedded into the Modelfile for persistent knowledge
+- **Model Enhancement**: Optimized model configuration for better performance
 - **Portable Installation**: Self-contained portable Python environment
 
 ## 📋 Requirements
@@ -39,15 +40,38 @@ A complete one-click solution for creating custom Ollama models from your docume
    - Enter your custom model name
    - Provide model description and behavior instructions
    - Configure model parameters
-4. **Add Documents** to the generated documents folder when prompted
-5. **Wait** for processing and model creation
+4. **Add Instructions** to the generated documents folder when prompted (or create a dummy.txt file)
+5. **Wait** for processing and optimized model creation
 6. **Test** your new custom model!
+
+## 📝 Adding Custom Instructions
+
+To enhance your model's behavior and performance, you can include specific instructions:
+
+### Method 1: Create an Instructions File
+Create a text file (e.g., `instructions.txt`) in your documents folder with specific behavioral guidelines for the model:
+
+```txt
+You are a helpful assistant specialized in customer support.
+Always be polite and professional in your responses.
+Provide step-by-step solutions when possible.
+Ask clarifying questions if the user's request is unclear.
+```
+
+### Method 2: Add Instructions to Configuration
+Include instruction sections in your setup files using clear headings like:
+- "Model Behavior Guidelines"
+- "Response Instructions"
+- "Performance Parameters"
+
+### Method 3: Use Dummy File for Optimal Performance
+If you don't have specific instructions but want optimal model performance, create an empty `dummy.txt` file in your documents folder. This ensures proper model initialization and configuration.
 
 ## 📖 Usage Example
 
 ```cmd
-# After running the script and creating a model named "my-docs"
-ollama run my-docs "What information do you have about our quarterly reports?"
+# After running the script and creating a model named "my-assistant"
+ollama run my-assistant "How can I help you today?"
 ```
 
 ## 🎯 Popular Base Models
@@ -78,8 +102,8 @@ After running, the script creates:
 
 ```
 [MODEL_NAME]_workspace/
-├── documents/          # Place your source documents here
-├── processed/          # Processed document outputs
+├── documents/          # Place your instruction files here
+├── processed/          # Processed instruction outputs
 ├── models/            # Generated Modelfile
 ├── temp/              # Temporary processing files
 └── python_portable/   # Portable Python installation
@@ -101,12 +125,13 @@ Examples:
 
 ### Document Processing
 
-The script intelligently processes different document types:
+The script intelligently processes different file types for model configuration:
 
-- **PDFs**: Extracts text and tables using multiple extraction methods
-- **Office Documents**: Native format processing for accurate content extraction
-- **Text Files**: Smart encoding detection for international character support
-- **Code Files**: Preserves formatting and syntax
+- **PDFs**: Extracts text for instruction creation
+- **Office Documents**: Processes content for model guidelines
+- **Text Files**: Smart encoding detection for instruction files
+- **Code Files**: Preserves formatting for technical instructions
+- **Instruction Files**: Processes custom instruction files to optimize model behavior
 
 ## 🛠️ Troubleshooting
 
@@ -128,8 +153,9 @@ The script intelligently processes different document types:
 
 **Document Processing Issues**
 - Check file permissions
-- Ensure documents aren't password-protected
+- Ensure files aren't password-protected
 - Try with simpler file formats first (TXT, PDF)
+- If no instruction files are available, create a dummy.txt file for optimal model initialization
 
 ## 📁 Project Structure
 
@@ -137,8 +163,8 @@ The script intelligently processes different document types:
 oneclickollama.bat          # Main script
 ├── Auto-installs Ollama
 ├── Sets up portable Python
-├── Creates document processor
-├── Processes your documents  
+├── Creates instruction processor
+├── Processes your instruction files  
 ├── Generates custom Modelfile
 └── Creates and tests model
 ```
@@ -152,7 +178,7 @@ Contributions are welcome! Please feel free to:
 - Submit pull requests
 - Improve documentation
 
-## 📝 License
+## 📄 License
 
 This project is open source. Please check the repository for license details.
 
@@ -184,4 +210,4 @@ If you encounter issues:
 
 **Made with ❤️ by Ali Kutlusoy**
 
-*Transform your documents into intelligent AI assistants with just one click!*
+*Transform your ideas into intelligent AI assistants with just one click!*
