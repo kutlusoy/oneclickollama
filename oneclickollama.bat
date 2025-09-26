@@ -392,10 +392,20 @@ goto :eof
 
 :install_ollama
 echo %YELLOW%[INFO]%RESET% Downloading Ollama installer...
-powershell -Command "Invoke-WebRequest -Uri 'https://ollama.com/download/windows' -OutFile '%TEMP%\ollama-installer.exe'"
+powershell -Command "try { Invoke-WebRequest -Uri 'https://ollama.com/download/OllamaSetup.exe' -OutFile '%TEMP%\OllamaSetup.exe' -ErrorAction Stop } catch { exit 1 }"
+if %ERRORLEVEL% neq 0 (
+    echo %RED%[ERROR]%RESET% Download failed! Please check your internet connection.
+    pause
+    goto :eof
+)
 echo %YELLOW%[INFO]%RESET% Installing Ollama...
-"%TEMP%\ollama-installer.exe" /S
-timeout /t 30 /nobreak >nul
+start /wait "%TEMP%\OllamaSetup.exe" /S
+if %ERRORLEVEL% equ 0 (
+    echo %GREEN%[SUCCESS]%RESET% Ollama installed successfully!
+    del "%TEMP%\OllamaSetup.exe"
+) else (
+    echo %RED%[ERROR]%RESET% Installation failed!
+)
 goto :eof
 
 :install_portable_python
