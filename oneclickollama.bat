@@ -402,7 +402,6 @@ echo %YELLOW%[INFO]%RESET% Installing Ollama...
 start /wait "OllamaSetup.exe" /S
 if %ERRORLEVEL% equ 0 (
     echo %GREEN%[SUCCESS]%RESET% Ollama installed successfully!
-    del "OllamaSetup.exe"
 ) else (
     echo %RED%[ERROR]%RESET% Installation failed!
 )
